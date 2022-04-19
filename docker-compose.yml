@@ -14,6 +14,16 @@ services:
     depends_on:
       - db
       - rabbitmq
+  migration:
+    container_name: nuveo_app_migration
+    image: gosidekick/migration:v3.0.0
+    command: exec -url "postgres://${PSQL_USER}:${PSQL_PWD}@db:5432/${PSQL_DB}?sslmode=disable" -dir ./fixtures -action up
+    volumes:
+      - ./app/fixtures:/fixtures
+    networks:
+      - nuveo-app
+    depends_on:
+      - db
   db:
     container_name: nuveo_db
     image: postgres:14.2
