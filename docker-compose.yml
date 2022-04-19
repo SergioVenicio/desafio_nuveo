@@ -1,0 +1,46 @@
+version: '3.3'
+
+services:
+  app:
+    container_name: nuveo_app
+    build:
+      context: ./app/docker/
+    volumes:
+      - ./app/src:/usr/src/app
+    ports:
+      - 5000:5000
+    networks:
+      - nuveo-app
+    depends_on:
+      - db
+      - rabbitmq
+  db:
+    container_name: nuveo_db
+    image: postgres:14.2
+    restart: always
+    ports:
+      - 5432:5432
+    volumes:
+      - /var/lib/postgresql/data
+    networks:
+      - nuveo-app
+    environment:
+      POSTGRES_DB: ${PSQL_DB}
+      POSTGRES_USER: ${PSQL_USER}
+      POSTGRES_PASSWORD: ${PSQL_PWD}
+
+  rabbitmq:
+    container_name: nuveo_rabbitmq
+    image: rabbitmq:3-management-alpine
+    volumes:
+      - /var/lib/rabbitmq
+    networks:
+      - nuveo-app
+    environment:
+      - RABBITMQ_DEFAULT_USER=${RABBITMQ_USER}
+      - RABBITMQ_DEFAULT_PASS=${RABBITMQ_PWD}
+      - RABBITMQ_ERLANG_COOKIE=${RABBITMQ_COOKIE}
+
+networks:
+  nuveo-app:
+    driver: bridge
