@@ -16,6 +16,20 @@ services:
       - rabbitmq
     env_file:
       - .env
+  consumer:
+    container_name: nuveo_customer_create_consumer
+    build:
+      context: ./consumer/docker/
+    volumes:
+      - ./consumer/src:/usr/src/app
+      - ./consumer/customers_folder:/${NOVOS_CLIENTES}
+    networks:
+      - nuveo-app
+    depends_on:
+      - db
+      - rabbitmq
+    env_file:
+      - .env
   migration:
     container_name: nuveo_app_migration
     image: gosidekick/migration:v3.0.0
@@ -53,7 +67,12 @@ services:
     environment:
       - RABBITMQ_DEFAULT_USER=${RABBITMQ_USER}
       - RABBITMQ_DEFAULT_PASS=${RABBITMQ_PWD}
-      - RABBITMQ_ERLANG_COOKIE=${RABBITMQ_COOKIE}
+    expose:
+      - 5671
+      - 5672
+    ports:
+      - 15671:15671
+      - 15672:15672
 
 networks:
   nuveo-app:

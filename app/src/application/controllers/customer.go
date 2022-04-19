@@ -49,6 +49,11 @@ func (c *CustomerController) Create(w http.ResponseWriter, r *http.Request) {
 	newCustomer, _ := c.CustomerUseCase.Create(customer.Name, customer.Address)
 	w.WriteHeader(http.StatusCreated)
 	json.NewEncoder(w).Encode(newCustomer)
+
+	err = c.CustomerUseCase.PublishCreateNotification(newCustomer)
+	if err != nil {
+		panic(err)
+	}
 }
 
 func (c *CustomerController) Update(w http.ResponseWriter, r *http.Request) {

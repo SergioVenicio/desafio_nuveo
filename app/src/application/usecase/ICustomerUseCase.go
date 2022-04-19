@@ -11,4 +11,5 @@ type ICustomerUseCase interface {
 	Create(name string, address string) (entity.Customer, error)
 	Update(customer entity.Customer) error
 	Delete(uuid uuid.UUID)
+	PublishCreateNotification(customer entity.Customer) error
 }
