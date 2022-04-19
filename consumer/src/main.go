@@ -59,10 +59,15 @@ func QueueDeclare(name string) *amqp.Queue {
 
 func Consume(queue *amqp.Queue, callback func(amqp.Delivery)) error {
 	ch := GetChannel()
+	_ = ch.Qos(
+		100,
+		0,
+		false,
+	)
 	msgs, err := ch.Consume(
 		queue.Name,
 		"",
-		false,
+		true,
 		false,
 		false,
 		false,
@@ -105,7 +110,6 @@ func ConsumerCreateCustomer(msg amqp.Delivery) {
 	if err != nil {
 		panic(err)
 	}
-	msg.Ack(true)
 }
 
 func main() {
