@@ -9,11 +9,11 @@ import (
 )
 
 type CustomerController struct {
-	useCase usecase.CustomerUseCase
+	CustomerUseCase usecase.ICustomerUseCase
 }
 
 func (c *CustomerController) List(w http.ResponseWriter, r *http.Request) {
-	customers := c.useCase.List()
+	customers := c.CustomerUseCase.List()
 	json.NewEncoder(w).Encode(customers)
 }
 
@@ -27,7 +27,7 @@ func (c *CustomerController) Create(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	newCustomer, _ := c.useCase.Create(customer.Name, customer.Address)
+	newCustomer, _ := c.CustomerUseCase.Create(customer.Name, customer.Address)
 	w.WriteHeader(http.StatusCreated)
 	json.NewEncoder(w).Encode(newCustomer)
 }

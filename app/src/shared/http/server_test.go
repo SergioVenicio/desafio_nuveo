@@ -8,21 +8,27 @@ import (
 	"testing"
 	"time"
 
+	"github.com/SergioVenicio/desafio_nuveo/application/usecase"
 	"github.com/SergioVenicio/desafio_nuveo/domain/entity"
+	"github.com/SergioVenicio/desafio_nuveo/shared/repositories"
 )
 
-const baseUrl = "http://localhost:5000"
+const baseUrl = "http://localhost:5001"
 const customerEndpoint = "/cliente"
 
 func TestCustomerEndPoint(t *testing.T) {
-	server := HttpServer{
+	customerRespository := repositories.MockCustomerRepository{}
+	customerUseCase := usecase.CustomerUseCase{
+		Repository: &customerRespository,
+	}
+	config := Config{
 		Host: "0.0.0.0",
-		Port: 5000,
+		Port: 5001,
 	}
 	client := &http.Client{
 		Timeout: 1 * time.Second,
 	}
-	go server.Run()
+	go config.Run(&customerUseCase)
 
 	t.Run("create customer", func(t *testing.T) {
 		customer := entity.Customer{
