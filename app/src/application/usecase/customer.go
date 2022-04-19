@@ -9,10 +9,6 @@ type CustomerUseCase struct {
 }
 
 func (c *CustomerUseCase) List() []entity.Customer {
-	var customers []entity.Customer
-
-	customer, _ := entity.NewCustomer("Sergio", "Rua dalmacio de Azevedo, 233")
-	c.customers = append(customers, customer)
 	return c.customers
 }
 

@@ -22,10 +22,12 @@ func (c *CustomerController) Create(w http.ResponseWriter, r *http.Request) {
 	json.NewDecoder(r.Body).Decode(&customer)
 	err := customer.Validate()
 	if err != nil {
+		w.WriteHeader(http.StatusBadRequest)
 		w.Write([]byte(err.Error()))
 		return
 	}
 
 	newCustomer, _ := c.useCase.Create(customer.Name, customer.Address)
+	w.WriteHeader(http.StatusCreated)
 	json.NewEncoder(w).Encode(newCustomer)
 }
