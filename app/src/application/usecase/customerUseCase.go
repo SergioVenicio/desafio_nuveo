@@ -5,10 +5,19 @@ import (
 
 	"github.com/SergioVenicio/desafio_nuveo/domain/entity"
 	"github.com/SergioVenicio/desafio_nuveo/shared/repositories"
+	uuid "github.com/satori/go.uuid"
 )
 
 type CustomerUseCase struct {
 	Repository repositories.ICustomerRepository
+}
+
+func (c *CustomerUseCase) Get(uuid uuid.UUID) (entity.Customer, error) {
+	customers, err := c.Repository.Get(uuid)
+	if err != nil {
+		return entity.Customer{}, err
+	}
+	return customers, nil
 }
 
 func (c *CustomerUseCase) List() []entity.Customer {
@@ -32,6 +41,14 @@ func (c *CustomerUseCase) Create(name string, address string) (entity.Customer, 
 	return newCustomer, nil
 }
 
-func (c *CustomerUseCase) Delete(uuid string) {
+func (c *CustomerUseCase) Delete(uuid uuid.UUID) {
 	c.Repository.Delete(uuid)
+}
+
+func (c *CustomerUseCase) Update(customer entity.Customer) error {
+	err := c.Repository.Update(customer)
+	if err != nil {
+		return err
+	}
+	return nil
 }

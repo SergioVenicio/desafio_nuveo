@@ -24,6 +24,8 @@ func (c *Config) Run() {
 	}
 
 	router := mux.NewRouter()
+	router.HandleFunc("/cliente/{uuid}", customerController.Get).Methods("GET")
+	router.HandleFunc("/cliente/{uuid}", customerController.Update).Methods("PUT")
 	router.HandleFunc("/cliente/{uuid}", customerController.Delete).Methods("DELETE")
 	router.HandleFunc("/cliente", customerController.List).Methods("GET")
 	router.HandleFunc("/cliente", customerController.Create).Methods("POST")

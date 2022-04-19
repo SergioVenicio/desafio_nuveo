@@ -49,3 +49,14 @@ func TestValidateCustomerNameError(t *testing.T) {
 		t.Errorf("want error, get nil")
 	}
 }
+
+func TestCustomerSetUpdateDate(t *testing.T) {
+	customer := Customer{
+		Address: "test",
+		Name:    "test",
+	}
+	customer.SetUpdateDate()
+	if customer.UpdatedAt == "" {
+		t.Errorf("want datetime, get nil")
+	}
+}

@@ -38,6 +38,7 @@ func TestCustomerEndPoint(t *testing.T) {
 		}
 		reqBody, _ := json.Marshal(customer)
 		req, _ := http.NewRequest("POST", baseUrl+customerEndpoint, bytes.NewReader(reqBody))
+		req.Header.Add("Content-Type", "application/json")
 		resp, err := client.Do(req)
 		if err != nil {
 			panic(err)
@@ -62,6 +63,7 @@ func TestCustomerEndPoint(t *testing.T) {
 
 	t.Run("list customer", func(t *testing.T) {
 		req, _ := http.NewRequest("GET", baseUrl+customerEndpoint, nil)
+		req.Header.Add("Content-Type", "application/json")
 		resp, _ := client.Do(req)
 
 		if resp.StatusCode != http.StatusOK {
@@ -80,6 +82,33 @@ func TestCustomerEndPoint(t *testing.T) {
 			if customer.CreatedAt == "" {
 				t.Errorf("customer createdAt has no value %s", customer.CreatedAt)
 			}
+		}
+	})
+
+	t.Run("delete customer", func(t *testing.T) {
+		customer, _ := customerUseCase.Create("test", "test")
+		req, _ := http.NewRequest("DELETE", baseUrl+customerEndpoint+"/"+customer.Uuid.String(), nil)
+		req.Header.Add("Content-Type", "application/json")
+		resp, _ := client.Do(req)
+
+		if resp.StatusCode != http.StatusNoContent {
+			t.Errorf("want %d, get %d", http.StatusNoContent, resp.StatusCode)
+		}
+	})
+
+	t.Run("update customer", func(t *testing.T) {
+		customer, _ := customerUseCase.Create("test", "test")
+		newCustomer := entity.Customer{
+			Name:    "new name",
+			Address: "new addrs",
+		}
+		reqBody, _ := json.Marshal(newCustomer)
+		req, _ := http.NewRequest("PUT", baseUrl+customerEndpoint+"/"+customer.Uuid.String(), bytes.NewReader(reqBody))
+		req.Header.Add("Content-Type", "application/json")
+		resp, _ := client.Do(req)
+
+		if resp.StatusCode != http.StatusAccepted {
+			t.Errorf("want %d, get %d", http.StatusNoContent, resp.StatusCode)
 		}
 	})
 }

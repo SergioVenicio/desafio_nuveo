@@ -26,6 +26,10 @@ func NewCustomer(name string, address string) (Customer, error) {
 	return customer, nil
 }
 
+func (c *Customer) SetUpdateDate() {
+	c.UpdatedAt = time.Now().UTC().Format("2006-01-02T15:04:05Z")
+}
+
 func (c *Customer) Validate() error {
 	if c.Address == "" {
 		return errors.New("endereco field is required")
