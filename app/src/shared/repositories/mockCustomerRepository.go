@@ -16,3 +16,15 @@ func (r *MockCustomerRepository) Create(customer entity.Customer) error {
 	r.Customers = append(r.Customers, customer)
 	return nil
 }
+
+func (r *MockCustomerRepository) Delete(uuid string) {
+	var newCustomers []entity.Customer
+	for i := 0; i < len(r.Customers)-1; i++ {
+		if r.Customers[i].Uuid.String() == uuid {
+			continue
+		}
+
+		newCustomers = append(newCustomers, r.Customers[i])
+	}
+	r.Customers = newCustomers
+}

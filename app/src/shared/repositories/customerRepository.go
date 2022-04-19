@@ -44,3 +44,15 @@ func (r *CustomerRepository) Create(customer entity.Customer) error {
 
 	return nil
 }
+
+func (r *CustomerRepository) Delete(uuid string) {
+	db := r.Db.OpenConnection()
+
+	query := "DELETE FROM customer WHERE uuid = $1"
+	delete, err := db.Prepare(query)
+	if err != nil {
+		panic(err)
+	}
+
+	delete.Exec(uuid)
+}

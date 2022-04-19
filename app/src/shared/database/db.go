@@ -18,8 +18,6 @@ func (d *Database) OpenConnection() *sql.DB {
 
 	dbDns := fmt.Sprintf("host=%s port=5432 user=%s password=%s dbname=%s sslmode=disable", host, user, pwd, dbName)
 
-	fmt.Println(dbDns)
-
 	db, err := sql.Open("postgres", dbDns)
 	if err != nil {
 		panic(err.Error())

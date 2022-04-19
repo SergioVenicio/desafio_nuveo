@@ -28,3 +28,18 @@ func TestCustomerListUseCase(t *testing.T) {
 		t.Errorf("want len(customer) > 0, get 0")
 	}
 }
+
+func TestCustomerDeleteUseCase(t *testing.T) {
+	useCase := CustomerUseCase{
+		Repository: &repositories.MockCustomerRepository{},
+	}
+
+	useCase.Create("test", "test street 123")
+	customers := useCase.List()
+	uuid := customers[0].Uuid.String()
+
+	useCase.Delete(uuid)
+	if len(useCase.List()) > 0 {
+		t.Errorf("want len(customer) == 0, get %d", len(customers))
+	}
+}

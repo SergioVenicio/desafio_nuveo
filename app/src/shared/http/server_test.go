@@ -22,13 +22,14 @@ func TestCustomerEndPoint(t *testing.T) {
 		Repository: &customerRespository,
 	}
 	config := Config{
-		Host: "0.0.0.0",
-		Port: 5001,
+		Host:            "0.0.0.0",
+		Port:            5001,
+		CustomerUseCase: &customerUseCase,
 	}
 	client := &http.Client{
 		Timeout: 1 * time.Second,
 	}
-	go config.Run(&customerUseCase)
+	go config.Run()
 
 	t.Run("create customer", func(t *testing.T) {
 		customer := entity.Customer{

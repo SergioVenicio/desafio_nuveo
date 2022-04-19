@@ -31,3 +31,7 @@ func (c *CustomerUseCase) Create(name string, address string) (entity.Customer, 
 	}
 	return newCustomer, nil
 }
+
+func (c *CustomerUseCase) Delete(uuid string) {
+	c.Repository.Delete(uuid)
+}

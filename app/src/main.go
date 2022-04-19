@@ -11,8 +11,9 @@ func main() {
 		Repository: &repositories.CustomerRepository{},
 	}
 	config := http.Config{
-		Host: "0.0.0.0",
-		Port: 5000,
+		Host:            "0.0.0.0",
+		Port:            5000,
+		CustomerUseCase: &useCase,
 	}
-	config.Run(&useCase)
+	config.Run()
 }

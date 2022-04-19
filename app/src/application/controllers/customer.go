@@ -6,6 +6,7 @@ import (
 
 	"github.com/SergioVenicio/desafio_nuveo/application/usecase"
 	"github.com/SergioVenicio/desafio_nuveo/domain/entity"
+	"github.com/gorilla/mux"
 )
 
 type CustomerController struct {
@@ -30,4 +31,18 @@ func (c *CustomerController) Create(w http.ResponseWriter, r *http.Request) {
 	newCustomer, _ := c.CustomerUseCase.Create(customer.Name, customer.Address)
 	w.WriteHeader(http.StatusCreated)
 	json.NewEncoder(w).Encode(newCustomer)
+}
+
+func (c *CustomerController) Delete(w http.ResponseWriter, r *http.Request) {
+	parameters := mux.Vars(r)
+	uuid := parameters["uuid"]
+	if uuid == "" {
+		w.WriteHeader(http.StatusBadRequest)
+		w.Write([]byte("uuid field is required"))
+		return
+	}
+
+	c.CustomerUseCase.Delete(uuid)
+	w.WriteHeader(http.StatusNoContent)
+	w.Write([]byte(""))
 }
