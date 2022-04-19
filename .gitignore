@@ -17,3 +17,4 @@
 # vendor/
 
 psql-data/
+./customers_folder
