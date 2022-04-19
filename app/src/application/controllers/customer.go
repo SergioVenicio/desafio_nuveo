@@ -77,7 +77,7 @@ func (c *CustomerController) Update(w http.ResponseWriter, r *http.Request) {
 	customer.Uuid = uuid
 	err = c.CustomerUseCase.Update(customer)
 	if err != nil {
-		w.WriteHeader(http.StatusBadRequest)
+		w.WriteHeader(http.StatusNotFound)
 		w.Write([]byte(err.Error()))
 		return
 	}

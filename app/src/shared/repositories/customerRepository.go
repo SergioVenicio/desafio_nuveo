@@ -86,9 +86,14 @@ func (r *CustomerRepository) Update(customer entity.Customer) error {
 		return err
 	}
 	customer.SetUpdateDate()
-	_, err = update.Exec(customer.Uuid, customer.Name, customer.Address, customer.UpdatedAt)
+	result, err := update.Exec(customer.Uuid, customer.Name, customer.Address, customer.UpdatedAt)
 	if err != nil {
 		return err
+	}
+
+	rows, _ := result.RowsAffected()
+	if rows == 0 {
+		return errors.New("customer not found")
 	}
 
 	return nil
