@@ -2,7 +2,6 @@ version: '3.3'
 
 services:
   app:
-    container_name: nuveo_app
     build:
       context: ./app/docker/
     volumes:
@@ -16,8 +15,20 @@ services:
       - rabbitmq
     env_file:
       - .env
+  consumer:
+    build:
+      context: ./consumer/docker/
+    volumes:
+      - ./consumer/src:/usr/src/app
+      - ./consumer/customers_folder:/${NOVOS_CLIENTES}
+    networks:
+      - nuveo-app
+    depends_on:
+      - db
+      - rabbitmq
+    env_file:
+      - .env
   migration:
-    container_name: nuveo_app_migration
     image: gosidekick/migration:v3.0.0
     command: exec -url "postgres://${PSQL_USER}:${PSQL_PWD}@db:5432/${PSQL_DB}?sslmode=disable" -dir ./fixtures -action up
     volumes:
@@ -27,7 +38,6 @@ services:
     depends_on:
       - db
   db:
-    container_name: nuveo_db
     image: postgres:14.2
     restart: always
     ports:

@@ -117,6 +117,8 @@ func main() {
 	queue := QueueDeclare(queueName)
 
 	forever := make(chan bool)
-	go Consume(queue, ConsumerCreateCustomer)
+	go func() {
+		go Consume(queue, ConsumerCreateCustomer)
+	}()
 	<-forever
 }
