@@ -14,6 +14,7 @@ type CustomerRepository struct {
 
 func (r *CustomerRepository) ListCustomers() ([]entity.Customer, error) {
 	db := r.Db.OpenConnection()
+	defer db.Close()
 
 	statement, err := db.Query("SELECT uuid, name, address, created_at, updated_at FROM customer")
 	if err != nil {
@@ -33,6 +34,7 @@ func (r *CustomerRepository) ListCustomers() ([]entity.Customer, error) {
 
 func (r *CustomerRepository) Create(customer entity.Customer) error {
 	db := r.Db.OpenConnection()
+	defer db.Close()
 
 	query := "INSERT INTO customer (uuid, name, address, created_at) VALUES ($1, $2, $3, $4)"
 	insert, err := db.Prepare(query)
@@ -50,6 +52,7 @@ func (r *CustomerRepository) Create(customer entity.Customer) error {
 
 func (r *CustomerRepository) Get(uuid uuid.UUID) (entity.Customer, error) {
 	db := r.Db.OpenConnection()
+	defer db.Close()
 
 	var customer entity.Customer
 
@@ -72,6 +75,8 @@ func (r *CustomerRepository) Get(uuid uuid.UUID) (entity.Customer, error) {
 
 func (r *CustomerRepository) Update(customer entity.Customer) error {
 	db := r.Db.OpenConnection()
+	defer db.Close()
+
 	query := `
 		UPDATE
 			CUSTOMER
@@ -101,6 +106,7 @@ func (r *CustomerRepository) Update(customer entity.Customer) error {
 
 func (r *CustomerRepository) Delete(uuid uuid.UUID) {
 	db := r.Db.OpenConnection()
+	defer db.Close()
 
 	query := "DELETE FROM customer WHERE uuid = $1"
 	delete, err := db.Prepare(query)
