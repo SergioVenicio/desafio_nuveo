@@ -20,10 +20,14 @@ func NewCustomer(name string, address string) (Customer, error) {
 		Uuid:      uuid.NewV4(),
 		Name:      name,
 		Address:   address,
-		CreatedAt: time.Now().UTC().Format("2006-01-02"),
+		CreatedAt: time.Now().UTC().Format("2006-01-02T15:04:05Z"),
 	}
 
 	return customer, nil
+}
+
+func (c *Customer) SetUpdateDate() {
+	c.UpdatedAt = time.Now().UTC().Format("2006-01-02T15:04:05Z")
 }
 
 func (c *Customer) Validate() error {

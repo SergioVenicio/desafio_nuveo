@@ -17,4 +17,4 @@
 # vendor/
 
 psql-data/
-rabbitmq/
+consumer/customers_folder/
