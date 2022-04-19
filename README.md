@@ -1,7 +1,26 @@
 # desafio_nuveo
 
-# Env file variables
-## POSTGRES
+## Endpoints
+### GET /cliente
+### GET /client/{uuid}
+### DELETE /client/{uuid}
+### POST /cliente
+```
+{
+	"endereco": "Rua 123",
+	"nome": "test"
+}
+```
+### PUT /client/{uuid}
+```
+{
+	"endereco": "Nova Rua 123",
+	"nome": "Novo Nome"
+}
+```
+
+## Env file variables
+### POSTGRES
 PSQL_USER = user
 <br/>
 PSQL_PWD= password
@@ -11,7 +30,7 @@ PSQL_DB= database
 PSQL_HOST= container host
 <br/>
 
-## RABBITMQ
+### RABBITMQ
 RABBITMQ_USER= user
 <br/>
 RABBITMQ_PWD= password
